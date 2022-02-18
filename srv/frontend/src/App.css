@@ -1,0 +1,8 @@
+div.controls label {
+  display: block;
+  margin-top: 10px;
+}
+
+div.controls {
+  margin-bottom: 20px;
+}

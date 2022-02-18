@@ -1,0 +1,36 @@
+.preview {
+  position: relative;
+  width: 128px;
+  height: 128px;
+  overflow: clip;
+}
+
+.preview img.parrot {
+  position: absolute;
+  width: 128px;
+  height: 128px;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.preview img.overlay {
+  position: absolute;
+  z-index: 1;
+}
+
+a.button {
+  border: 1px solid teal;
+  background: teal;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  padding: 10px 5px;
+  margin: 10px;
+  display: inline-block;
+}
+
+a.button:hover {
+  color: black;
+  background: white;
+}
