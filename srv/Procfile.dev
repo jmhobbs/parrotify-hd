@@ -1,3 +1,2 @@
-storybook: cd frontend && yarn start-storybook
 frontend: cd frontend && yarn dev --clearScreen false
 backend: air

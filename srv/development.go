@@ -6,10 +6,16 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
+
+func logSink() io.Writer{
+	return zerolog.ConsoleWriter{Out: os.Stderr}
+}
 
 func rootHandler() http.Handler {
 	log.Info().Msg("[DEV] Proxing / to localhost:3000")
