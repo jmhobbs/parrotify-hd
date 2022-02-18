@@ -5,5 +5,5 @@ dev:
 
 build:
 	cd frontend && yarn build
-	go build -tags=production -o parrotify-hd-server .
+	go build -tags=production -o ../bin/parrotify-hd-server .
 

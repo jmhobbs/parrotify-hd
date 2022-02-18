@@ -1,4 +1,6 @@
 .DS_Store
 *.png
 *.gif
+node_modules/
+bin/
 
