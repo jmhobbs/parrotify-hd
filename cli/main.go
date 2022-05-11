@@ -16,6 +16,7 @@ func main () {
 		shiftX *int = flag.Int("x", 0, "shift by pixels on the X axis")
 		shiftY *int = flag.Int("y", 0, "shift by pixels on the Y axis")
 		scale *int = flag.Int("scale", 0, "adjust scale proportionally by pixels in width")
+		flip *bool = flag.Bool("flip", false, "flip the overlay image horizontally")
 	)
 	flag.Parse()
 
@@ -24,7 +25,7 @@ func main () {
 		panic(err)
 	}
 
-	out, err := parrot.Overlay(overlay, *scale, *shiftX, *shiftY)
+	out, err := parrot.Overlay(overlay, *scale, *shiftX, *shiftY, *flip)
 	if err != nil {
 		panic(err)
 	}

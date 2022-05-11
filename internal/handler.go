@@ -48,8 +48,10 @@ func MakeHandler(log zerolog.Logger) http.HandlerFunc {
 		if err != nil {
 			shiftY = 0
 		}
+
+		flip := r.URL.Query().Get("flip") == "true"
 		
-		gif, err := parrot.Overlay(overlay, int(scale), int(shiftX), int(shiftY))
+		gif, err := parrot.Overlay(overlay, int(scale), int(shiftX), int(shiftY), flip)
 		if err != nil {
 			log.Error().Err(err).Msg("Unable to compose gif")
 			w.WriteHeader(http.StatusInternalServerError)

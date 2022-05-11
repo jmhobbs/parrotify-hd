@@ -13,7 +13,7 @@ import (
 	"os/exec"
 	"path"
 
-	"github.com/nfnt/resize"
+	"github.com/disintegration/imaging"
 )
 
 const DEFAULT_SCALE int = 70
@@ -38,7 +38,7 @@ func init () {
 	}
 }
 
-func Overlay(overlay image.Image, scale int, shiftX, shiftY int) ([]byte, error) {
+func Overlay(overlay image.Image, scale int, shiftX, shiftY int, flip bool) ([]byte, error) {
 	buf := bytes.NewBuffer(GifBytes)
 
 	var err error
@@ -47,7 +47,11 @@ func Overlay(overlay image.Image, scale int, shiftX, shiftY int) ([]byte, error)
 		panic(err)
 	}
 
-	overlayScaled := resize.Resize(uint(DEFAULT_SCALE + scale), 0, overlay, resize.Bicubic)
+	overlayScaled := imaging.Resize(overlay, int(DEFAULT_SCALE + scale), 0, imaging.Lanczos)
+	if flip {
+		overlayScaled = imaging.FlipH(overlayScaled)
+	}
+
 	halfOverlayWidth := overlayScaled.Bounds().Dx() / 2
 	halfOverlayHeight := overlayScaled.Bounds().Dy() / 2
 
