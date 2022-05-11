@@ -3,4 +3,5 @@
 *.gif
 node_modules/
 bin/
+.yarn/
 

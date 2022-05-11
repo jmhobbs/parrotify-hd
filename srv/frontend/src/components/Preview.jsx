@@ -23,8 +23,21 @@ function Preview(props) {
     `src=${encodeURIComponent(props.src)}`,
     `scale=${props.scale}`,
     `x=${props.x}`,
-    `y=${props.y}`
+    `y=${props.y}`,
+    `flip=${props.flip}`
   ].join('&');
+
+  const style = {
+    width: width + 'px',
+    height: height + 'px',
+    top: top + 'px',
+    left: left + 'px',
+  };
+
+  if(props.flip) {
+    style['-webkit-transform'] = 'scaleX(-1)';
+    style.transform = 'scaleX(-1)';
+  }
 
   return (
     <>
@@ -33,12 +46,7 @@ function Preview(props) {
       <img
         className="overlay"
         src={props.src}
-        style={{
-          width: width + 'px',
-          height: height + 'px',
-          top: top + 'px',
-          left: left + 'px',
-        }}
+        style={style}
       />
     </div>
         <a className='button' href={download_url} target='_blank'>Download GIF</a>

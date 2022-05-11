@@ -2,6 +2,7 @@ import { Component } from 'react'
 
 import Slider from './components/Slider';
 import Preview from './components/Preview';
+import Toggle from './components/Toggle';
 
 import './App.css';
 
@@ -16,6 +17,7 @@ class App extends Component {
       height: 0,
       width: 0,
 
+      flip: false,
       scale: 0,
       x: 0,
       y: 0,
@@ -89,6 +91,13 @@ class App extends Component {
           
           <label>Vertical Offset</label>
           {this.renderSlider('y')}
+
+          <Toggle
+            name="flip"
+            checked={this.state.flip}
+            label="Flip"
+            onUpdate={(v) => this.setState({flip: v})}
+          />
         </div>
 
         <Preview
@@ -99,6 +108,7 @@ class App extends Component {
           y={this.state.y}
           width={this.state.width}
           height={this.state.height}
+          flip={this.state.flip}
         />
       </div>
     )

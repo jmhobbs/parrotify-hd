@@ -13,6 +13,7 @@ export default {
     scale: 0,
     x: 0,
     y: 0,
+    flip: false,
   }
 };
 
@@ -47,4 +48,12 @@ Shifted.args = {
   height: 442,
   x: -20,
   y: 20,
+};
+
+export const Flipped = Template.bind({});
+Flipped.args = {
+  src: zol,
+  width: 324,
+  height: 442,
+  flip: true,
 };
