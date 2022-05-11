@@ -1,20 +1,41 @@
 package internal
 
 import (
+	"crypto/sha256"
+	"fmt"
+	"image"
+	"image/gif"
+	"image/jpeg"
 	"image/png"
+	"io"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/rs/zerolog"
 
 	"github.com/jmhobbs/parrotify-hd/pkg/parrot"
 )
 
+func decodeByContentType(body io.Reader, contentType string) (image.Image, error) {
+	split := strings.Split(contentType, ";")
+	switch split[0] {
+	case "image/png":
+		return png.Decode(body)
+	case "image/jpeg":
+		return jpeg.Decode(body)
+	case "image/gif":
+		return gif.Decode(body)
+	}
+	return nil, fmt.Errorf("Unknown image filetype: %q", split[0])
+}
+
 func MakeHandler(log zerolog.Logger) http.HandlerFunc {
 	return func (w http.ResponseWriter, r *http.Request) {
 		overlaySrc := r.URL.Query().Get("src")
 		
 		if overlaySrc == "" {
+			w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
 			w.Write(parrot.GifBytes)
 			return
 		}
@@ -28,8 +49,7 @@ func MakeHandler(log zerolog.Logger) http.HandlerFunc {
 		}
 		defer resp.Body.Close()
 
-		// todo: handle other encodings
-		overlay, err := png.Decode(resp.Body)
+		overlay, err := decodeByContentType(resp.Body, resp.Header.Get("content-type"))
 		if err != nil {
 			log.Error().Err(err).Str("src", overlaySrc).Msg("Unable to decode overlay image")
 			w.WriteHeader(http.StatusInternalServerError)
@@ -58,6 +78,12 @@ func MakeHandler(log zerolog.Logger) http.HandlerFunc {
 			return
 		}
 
+		overlaySrcHash := sha256.New()
+		overlaySrcHash.Write([]byte(overlaySrc))
+		etag := fmt.Sprintf("%x_%d_%d_%d_%t", overlaySrcHash.Sum(nil), scale, shiftX, shiftY, flip)
+
+		w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
+		w.Header().Set("ETag", fmt.Sprintf("%q", etag))
 		w.Write(gif)
 	}
 }

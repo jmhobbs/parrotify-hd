@@ -4,8 +4,10 @@ package main
 
 import (
 	"embed"
+	"io"
 	"io/fs"
 	"net/http"
+	"os"
 )
 
 //go:embed frontend/dist

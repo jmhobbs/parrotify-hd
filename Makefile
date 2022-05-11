@@ -1,4 +1,4 @@
-.PHONY: clean bin build build_cli build_srv build_srv_js
+.PHONY: clean bin build build_cli build_srv vendor deploy
 
 build: build_cli build_srv
 
@@ -12,6 +12,6 @@ bin:
 build_cli: bin
 	go build -o bin/parrotify-hd-cli ./cli
 
-build_srv: bin build_srv_js
+build_srv: bin
 	cd srv && make build
 
