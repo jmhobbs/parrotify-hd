@@ -1,2 +1,2 @@
 frontend: cd frontend && yarn dev --clearScreen false
-backend: air
+backend: cd .. && air -c srv/.air.toml

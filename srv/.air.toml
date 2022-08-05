@@ -1,18 +1,18 @@
 root = "."
 testdata_dir = "testdata"
-tmp_dir = "tmp"
+tmp_dir = "srv/tmp"
 
 [build]
-  bin = "./tmp/main"
-  cmd = "go build -o ./tmp/main ."
+  bin = "./srv/tmp/main"
+  cmd = "go build -o ./srv/tmp/main ./srv/"
   delay = 1000
-  exclude_dir = ["assets", "tmp", "vendor", "testdata", "frontend"]
+  exclude_dir = ["srv/assets", "srv/tmp", "srv/vendor", "srv/testdata", "srv/frontend"]
   exclude_file = []
   exclude_regex = ["_test.go"]
   exclude_unchanged = false
   follow_symlink = false
   full_bin = ""
-  include_dir = []
+  include_dir = ["internal", "pkg", "srv"]
   include_ext = ["go", "tpl", "tmpl", "html"]
   kill_delay = "0s"
   log = "build-errors.log"
