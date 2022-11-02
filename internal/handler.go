@@ -47,9 +47,9 @@ func decodeByContentType(body io.Reader, contentType string) (image.Image, error
 }
 
 func MakeHandler(log zerolog.Logger) http.HandlerFunc {
-	return func (w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
 		overlaySrc := r.URL.Query().Get("src")
-		
+
 		if overlaySrc == "" {
 			w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
 			w.Write(parrot.GifBytes)
@@ -90,8 +90,13 @@ func MakeHandler(log zerolog.Logger) http.HandlerFunc {
 		}
 
 		flip := r.URL.Query().Get("flip") == "true"
-		
-		gif, err := parrot.Overlay(overlay, int(scale), int(shiftX), int(shiftY), flip)
+
+		rotate, err := strconv.ParseFloat(r.URL.Query().Get("rotate"), 64)
+		if err != nil {
+			rotate = 0
+		}
+
+		gif, err := parrot.Overlay(overlay, int(scale), int(shiftX), int(shiftY), flip, rotate)
 		if err != nil {
 			log.Error().Err(err).Msg("Unable to compose gif")
 			w.WriteHeader(http.StatusInternalServerError)

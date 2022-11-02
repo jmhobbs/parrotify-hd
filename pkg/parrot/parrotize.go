@@ -5,6 +5,7 @@ import (
 	_ "embed"
 	"fmt"
 	"image"
+	"image/color"
 	"image/draw"
 	"image/gif"
 	"image/png"
@@ -23,7 +24,7 @@ var GifBytes []byte
 
 var centers []image.Point
 
-func init () {
+func init() {
 	centers = []image.Point{
 		image.Pt(80, 54),
 		image.Pt(70, 52),
@@ -38,7 +39,7 @@ func init () {
 	}
 }
 
-func Overlay(overlay image.Image, scale int, shiftX, shiftY int, flip bool) ([]byte, error) {
+func Overlay(overlay image.Image, scale int, shiftX, shiftY int, flip bool, rotate float64) ([]byte, error) {
 	buf := bytes.NewBuffer(GifBytes)
 
 	var err error
@@ -47,10 +48,11 @@ func Overlay(overlay image.Image, scale int, shiftX, shiftY int, flip bool) ([]b
 		panic(err)
 	}
 
-	overlayScaled := imaging.Resize(overlay, int(DEFAULT_SCALE + scale), 0, imaging.Lanczos)
+	overlayScaled := imaging.Resize(overlay, int(DEFAULT_SCALE+scale), 0, imaging.Lanczos)
 	if flip {
 		overlayScaled = imaging.FlipH(overlayScaled)
 	}
+	overlayScaled = imaging.Rotate(overlayScaled, rotate*-1, color.Transparent)
 
 	halfOverlayWidth := overlayScaled.Bounds().Dx() / 2
 	halfOverlayHeight := overlayScaled.Bounds().Dy() / 2
@@ -66,7 +68,7 @@ func Overlay(overlay image.Image, scale int, shiftX, shiftY int, flip bool) ([]b
 		dst := image.NewRGBA(frame.Bounds())
 		draw.Draw(dst, frame.Bounds(), frame, image.Point{0, 0}, draw.Over)
 
-		position := offsetRectangle(overlayScaled.Bounds(), center.X - halfOverlayWidth + shiftX, center.Y - halfOverlayHeight + shiftY)
+		position := offsetRectangle(overlayScaled.Bounds(), center.X-halfOverlayWidth+shiftX, center.Y-halfOverlayHeight+shiftY)
 		draw.Draw(dst, position, overlayScaled, image.Point{0, 0}, draw.Over)
 
 		out, err := os.Create(path.Join(dir, fmt.Sprintf("out.%d.png", i)))
@@ -80,7 +82,7 @@ func Overlay(overlay image.Image, scale int, shiftX, shiftY int, flip bool) ([]b
 		}
 	}
 
-	// rather than build our own palettes we write out 
+	// rather than build our own palettes we write out
 	// to disk and let imagemagick do the hard work
 	cmd := exec.Command(
 		"convert",
@@ -108,5 +110,5 @@ func Overlay(overlay image.Image, scale int, shiftX, shiftY int, flip bool) ([]b
 }
 
 func offsetRectangle(rect image.Rectangle, x, y int) image.Rectangle {
-	return image.Rect(x, y, rect.Dx() + x, rect.Dy() + y)
+	return image.Rect(x, y, rect.Dx()+x, rect.Dy()+y)
 }

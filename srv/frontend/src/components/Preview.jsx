@@ -24,7 +24,8 @@ function Preview(props) {
     `scale=${props.scale}`,
     `x=${props.x}`,
     `y=${props.y}`,
-    `flip=${props.flip}`
+    `flip=${props.flip}`,
+    `rotate=${props.rotate}`
   ].join('&');
 
   const style = {
@@ -34,9 +35,12 @@ function Preview(props) {
     left: left + 'px',
   };
 
+  style['-webkit-transform'] = 'rotate(' + props.rotate + 'deg)';
+  style.transform = 'rotate(' + props.rotate + 'deg)';
+
   if(props.flip) {
-    style['-webkit-transform'] = 'scaleX(-1)';
-    style.transform = 'scaleX(-1)';
+    style['-webkit-transform'] += ' scaleX(-1)';
+    style.transform += ' scaleX(-1)';
   }
 
   return (

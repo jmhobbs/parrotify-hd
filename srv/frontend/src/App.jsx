@@ -17,6 +17,7 @@ class App extends Component {
       height: 0,
       width: 0,
 
+      rotate: 0,
       flip: false,
       scale: 0,
       x: 0,
@@ -92,6 +93,9 @@ class App extends Component {
           <label>Vertical Offset</label>
           {this.renderSlider('y')}
 
+          <label>Rotate</label>
+          {this.renderSlider('rotate')}
+
           <Toggle
             name="flip"
             checked={this.state.flip}
@@ -109,6 +113,7 @@ class App extends Component {
           width={this.state.width}
           height={this.state.height}
           flip={this.state.flip}
+          rotate={this.state.rotate}
         />
       </div>
     )

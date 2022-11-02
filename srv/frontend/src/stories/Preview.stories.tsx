@@ -14,6 +14,7 @@ export default {
     x: 0,
     y: 0,
     flip: false,
+    rotate: 0,
   }
 };
 
@@ -56,4 +57,12 @@ Flipped.args = {
   width: 324,
   height: 442,
   flip: true,
+};
+
+export const Rotated = Template.bind({});
+Rotated.args = {
+  src: zol,
+  width: 324,
+  height: 442,
+  rotate: 30,
 };

@@ -9,14 +9,13 @@ import (
 	"github.com/jmhobbs/parrotify-hd/pkg/parrot"
 )
 
-
-
-func main () {
+func main() {
 	var (
-		shiftX *int = flag.Int("x", 0, "shift by pixels on the X axis")
-		shiftY *int = flag.Int("y", 0, "shift by pixels on the Y axis")
-		scale *int = flag.Int("scale", 0, "adjust scale proportionally by pixels in width")
-		flip *bool = flag.Bool("flip", false, "flip the overlay image horizontally")
+		shiftX *int     = flag.Int("x", 0, "shift by pixels on the X axis")
+		shiftY *int     = flag.Int("y", 0, "shift by pixels on the Y axis")
+		scale  *int     = flag.Int("scale", 0, "adjust scale proportionally by pixels in width")
+		flip   *bool    = flag.Bool("flip", false, "flip the overlay image horizontally")
+		rotate *float64 = flag.Float64("rotate", 0, "rotate the overlay this many degrees")
 	)
 	flag.Parse()
 
@@ -25,7 +24,7 @@ func main () {
 		panic(err)
 	}
 
-	out, err := parrot.Overlay(overlay, *scale, *shiftX, *shiftY, *flip)
+	out, err := parrot.Overlay(overlay, *scale, *shiftX, *shiftY, *flip, *rotate*-1)
 	if err != nil {
 		panic(err)
 	}
@@ -43,7 +42,9 @@ func main () {
 
 func loadOverlay(path string) (image.Image, error) {
 	overlayFile, err := os.Open(flag.Arg(0))
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 	defer overlayFile.Close()
 
 	// todo: input format variations
